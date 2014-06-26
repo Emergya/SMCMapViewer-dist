@@ -1,0 +1,320 @@
+/*
+ * Parser generator for map styles
+ *
+ */
+
+ruleList
+  = rules:rule*
+  {return rules.join("\n")}
+
+rule
+  = conditions:condition_list begin_object members:member* end_object
+  {
+    var result = "";
+    if(conditions != null && conditions != ""){
+       result = conditions + "{" + members.join(";") + ";" + "}";
+    }else{
+      result = members.join(";") + ";";
+    }
+    return result;
+  }
+
+condition_list
+  = first:condition rest:condition_comma*
+  {
+    var result = "";
+    var result_start = "if(";
+    var result_end = ")";
+    if(rest != ""){
+      result = result_start + first + " || " + rest.join(" || ") + result_end;
+    }else if(first != ""){
+      result = result_start + first + result_end;
+    }else{
+      result = "";
+    }
+    return result;
+  }
+
+condition_comma
+  = comma_separator cond:condition
+  { return cond;}
+
+condition
+  = gt:geometryType? z:zoom? zv:zoom_value? acl:attribute_condition_list? fc:feature_condition?
+  {
+    var result = "";
+    if(gt == "*"){
+      if(zv != null || acl != ""){
+        result += "(";
+      }
+      if(zv != null){
+        result += zv;
+      }
+      if(acl != "" && zv != null){
+        result += " && " + acl;
+      }else{
+        result += acl;
+      }
+      if(fc != null && (acl != "" || zv != null)){
+        result += " && " + fc;
+      }else if(fc != null){
+        result += fc;
+      }
+      if(zv != null || acl != ""){
+        result += ")";
+      }
+    }else{
+      if(gt != null || zv != null || acl != null){
+        result += "(";
+      }
+      if(gt != null){
+        result += "feature.geometry.type == " + "'" + gt + "'";
+      }
+      if(zv != null && gt != null){
+        result += " && " + zv;
+      }else if(zv != null && gt == null){
+        result += zv;
+      }
+      if(acl != "" && (zv != null || gt != null)){
+        result += " && " + acl;
+      }else{
+        result += acl;
+      }
+      if(fc != null && (acl != "" || zv != null || gt != null)){
+        result += " && " + fc;
+      }else if(fc != null){
+        result += fc;
+      }
+      if(gt != null || zv != null || acl != null){
+        result += ")";
+      }
+    }
+
+    return result;
+  }
+
+
+member
+  = name:string_member name_separator value:operand value_separator {
+      var res = null;
+      if(isNaN(value)){
+        res = "style." + name + " = " + "'" + value + "'";
+        if(value.indexOf("[") > -1){
+          res = "style." + name + " = " + value;
+        }
+      }else{
+        res = "style." + name + " = " + value;
+      }
+      return res;
+    }
+
+string_member
+  = hyphen_member
+  / complex_member
+
+hyphen_member
+  = first:[a-zA-Z0-9_]* "-" second:[a-zA-Z0-9_]*
+  {
+    var res = "";
+    if(second.length > 0){
+      second[0] = second[0].toUpperCase();
+      res = first.join("") + second.join("");
+    }else{
+      res = first.join("");
+    }
+    
+    return res;
+  }
+
+complex_member
+  = str:string_wq
+  {
+    var res = "";
+    if(str == "width"){
+      res = "strokeWidth";
+    }else if(str == "color"){
+      res = "strokeColor";
+    }else if(str == "dashes"){
+      res = "dashArray";
+    }else if(str == "linecap"){
+      res = "strokeCap";
+    }else{
+      res = str;
+    }
+    return res;
+  }
+
+zoom_value
+  = "z" min:number? zi:zoom_interval? max:number?
+  {
+    var res = "";
+    if(zi != null){
+      if(min != null && max != null){
+        res = "zoom > " + min + " && zoom < " + max;
+      }else if(min != null && max == null){
+        res = "zoom >= " + min;
+      }else if(min == null && max != null){
+        res = "zoom <= " + max;
+      }
+    }else{
+      if(min != null){
+        res = "zoom == " + min;
+      }
+    }
+
+    return res;
+  }
+
+attribute_condition_list
+  = atr_conditions:attribute_condition*
+  {return atr_conditions.join(" && ");}
+
+attribute_condition
+  = begin_array comp:comparaison end_array
+  {return comp;}
+
+comparaison
+  = first:operand op:operator second:operand
+  {
+    var res = "";
+    if(isNaN(second)){
+      res = "feature.properties." + first + " " + op + " '" + second + "'";
+    }else{
+      res = "feature.properties." + first + " " + op + " " + second + "";
+    }
+  return res;
+  }
+
+operand
+  = string
+  / number_array
+  / string_wq
+  / number
+
+operator
+  = factor:factor eq:equal_than?
+  {
+    var res = null;
+    if(eq != null){
+      res = factor + "=";
+    }else{
+      res = factor;
+    }
+    return res;
+  }
+
+factor
+  = less_than { return "<"}
+  / greater_than {return ">"}
+  / equal_than {return "=="}
+
+feature_condition
+  = ":" str:string_wq
+  {return "feature." + str;}
+
+/* Objects */
+begin_array     = ws "[" ws
+begin_object    = ws "{" ws
+end_array       = ws "]" ws
+end_object      = ws "}" ws
+name_separator  = ws ":" ws
+feature_condition_separator = ws ":"
+value_separator = ws ";" ws
+comma_separator = ws "," ws
+zoom = ws "|" ws
+zoom_interval = ws "-" ws
+less_than = "<"
+greater_than = ">"
+equal_than = "="
+ws "whitespace" = [ \t\n\r]*
+false = "false" { return false; }
+null  = "null"  { return null;  }
+true  = "true"  { return true;  }
+
+/* ----- 2. Values ----- */
+
+value
+  = rule
+  / number
+  / string
+
+/* ----- 5. Geometry Types ----- */
+
+geometryType
+  = "Point"
+  / "MultiPoint"
+  / "LineString"
+  / "MultiLineString"
+  / "Polygon"
+  / "MultiPolygon"
+  / "GeometryCollection"
+  / "*"
+
+/* ----- 7. Numbers ----- */
+
+number "number"
+  = minus? int frac? exp? { return parseFloat(text()); }
+
+number_array
+  = first:number rest:number_separator*
+  {
+    var res = "";
+    if(rest != ""){
+      res = "[" + first + "," + rest.join(",") + "]";
+    }else{
+      res = first;
+    }
+    return res;
+  }
+
+number_separator
+  = comma_separator? n:number
+  {return n;}
+
+decimal_point = "."
+digit1_9      = [1-9]
+e             = [eE]
+exp           = e (minus / plus)? DIGIT+
+frac          = decimal_point DIGIT+
+int           = zero / (digit1_9 DIGIT*)
+minus         = "-"
+plus          = "+"
+zero          = "0"
+
+/* ----- 7. Strings ----- */
+
+string_wq
+  = chars:char_wq*
+  {return chars.join("")}
+
+char_wq
+  = [a-zA-Z0-9_-]
+
+string "string"
+  = quotation_mark chars:char* quotation_mark { return chars.join(""); }
+
+char
+  = unescaped
+  / escape
+    sequence:(
+        '"'
+      / "\\"
+      / "/"
+      / "b" { return "\b"; }
+      / "f" { return "\f"; }
+      / "n" { return "\n"; }
+      / "r" { return "\r"; }
+      / "t" { return "\t"; }
+      / "u" digits:$(HEXDIG HEXDIG HEXDIG HEXDIG) {
+          return String.fromCharCode(parseInt(digits, 16));
+        }
+    )
+    { return sequence; }
+
+escape         = "\\"
+quotation_mark = '"'
+unescaped      = [\x20-\x21\x23-\x5B\x5D-\u10FFFF]
+
+/* See RFC 4234, Appendix B (http://tools.ietf.org/html/rfc4627). */
+DIGIT  = [0-9]
+HEXDIG = [0-9a-f]i
