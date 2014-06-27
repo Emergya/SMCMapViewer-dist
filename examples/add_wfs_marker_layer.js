@@ -1,4 +1,6 @@
 function initMap() {
+	SMC.BASE_URL = "../"
+	L.Icon.Default.imagePath = "../images";
 	var map = SMC.map('map');
 	map.setView([37.383333, -5.983333], 11);
 	var base = SMC.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -7,9 +9,10 @@ function initMap() {
 	}).addTo(map);
 
     var wfsMarkerLayer = SMC.wfsMarkerLayer({
-        serverURL: "http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_WFS_SP_Infraestructuras_Hidraulicas",
-        typeName: "edar",
-        label: "Prueba WFS"
+        serverURL: "http://www.ideandalucia.es/dea100/wfs",
+        typeName: "ideandalucia:it03_aeropuerto_pun",
+        label: "Prueba WFS",
+        outputFormat: "json"
     }).addTo(map);
 }
 window.onload = initMap;
