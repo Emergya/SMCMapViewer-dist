@@ -98,6 +98,10 @@ member
   = name:string_member name_separator value:operand value_separator {
       var res = null;
       if(isNaN(value)){
+        if(value.indexOf("class") > -1){
+          value = value.replace("class=", "class=\"");
+          value = value.replace(">", "\">")
+        }
         res = "style." + name + " = " + "'" + value + "'";
         if(value.indexOf("[") > -1){
           res = "style." + name + " = " + value;
