@@ -1,0 +1,15 @@
+.marker_red:before {
+	width: 32;
+	height: 37;
+	display: block;
+    float: left;
+    color: red;
+}
+
+.marker_blue:before {
+	width: 32;
+	height: 37;
+	display: block;
+    float: left;
+    color: blue;
+}
