@@ -35,8 +35,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Categorias paisajisticas",
-                    zIndex: 10
+                    label: "Categorias paisajisticas"
                 }] 
             },{
                 type: "SMC.layers.WMSLayer",
@@ -47,8 +46,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Ambitos paisajisticos",
-                    zIndex: 11
+                    label: "Ambitos paisajisticos"
                 }] 
             },{
                 type: "SMC.layers.WMSLayer",
@@ -59,8 +57,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Areas paisajisticas",
-                    zIndex: 12
+                    label: "Areas paisajisticas"
                 }] 
             }]
         },{
@@ -75,8 +72,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Linea Base Deslindada",
-                    zIndex: 1000
+                    label: "Linea Base Deslindada"
                 }] 
             },{
                 type: "SMC.layers.WMSLayer",
@@ -87,8 +83,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Lugares VVPP",
-                    zIndex: 14
+                    label: "Lugares VVPP"
                 }] 
             },{
                 type: "SMC.layers.WMSLayer",
@@ -99,8 +94,7 @@ function initMap() {
                     transparent: true,
                     crs: L.CRS.EPSG4326,
                     attribution: "Map data &copy; REDIAM",
-                    label: "Inventario VVPP",
-                    zIndex: 16
+                    label: "Inventario VVPP"
                 }] 
             }]
         }]
