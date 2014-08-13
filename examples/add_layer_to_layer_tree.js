@@ -12,7 +12,7 @@ function initMap() {
         format: 'image/png',
         transparent: true,
         crs: L.CRS.EPSG4326,
-        attribution: "Map data © Instituto Geográfico Nacional de España"
+        attribution: "Map data © Instituto Geogr&aacute;fico Nacional de Espa&ntilde;a"
     });
     var baseLayer = {
         "Street Map": base,
@@ -29,7 +29,7 @@ function initMap() {
         transparent: true,
         crs: L.CRS.EPSG4326,
         label: "PNOA",
-        attribution: "Map data © Instituto Geográfico Nacional de España"
+        attribution: "Map data © Instituto Geogr&aacute;fico Nacional de Espa&ntilde;a"
     }).addTo(map);
 }
 window.onload = initMap;
