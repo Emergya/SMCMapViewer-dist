@@ -17,8 +17,8 @@ function initMap() {
     }).addTo(map);
 
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
-        serverURL: "http://sir-libertador-apps:8080/geoserver/SmartCity/wfs",
-        typeName: "SmartCity:aeropuertos",
+        serverURL: "http://www.ideandalucia.es/dea100/wfs",
+        typeName: "ideandalucia:it03_aeropuerto_pun",
         label: "Aeropuertos",
         outputFormat: "json"
     }).addTo(map);
