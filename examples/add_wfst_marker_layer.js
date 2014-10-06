@@ -16,11 +16,12 @@ function initMap() {
         collapsed: false
     }).addTo(map);
 
+    var stylesheet ='* {iconUrl: "../images/marker-icon.png";markerWidth: 30;markerHeight: 40;} * [TITULO="smc"] {iconUrl:"../images/underground.png";markerWidth: 32;markerHeight: 37;}';
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
-        serverURL: "http://www.ideandalucia.es/dea100/wfs",
-        typeName: "ideandalucia:it03_aeropuerto_pun",
-        label: "Aeropuertos",
-        outputFormat: "json"
+       serverURL: "http://localhost/geoserver/s/wfs",
+       typeName: "s:EDITABLE_PUNTO",  
+       label: "Prueba WFST",
+       //stylesheet: stylesheet
     }).addTo(map);
 
    
