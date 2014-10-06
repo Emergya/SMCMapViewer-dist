@@ -16,11 +16,11 @@ function initMap() {
         collapsed: false
     }).addTo(map);
 
+   
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
-        serverURL: "http://www.ideandalucia.es/dea100/wfs",
-        typeName: "ideandalucia:it03_aeropuerto_pun",
-        label: "Aeropuertos",
-        outputFormat: "json"
+       serverURL: "http://geoemerg-win2008.emergya.es/geoserver/s/wfs",
+       typeName: "s:EDITABLE_PUNTO",  
+       label: "Prueba WFST"
     }).addTo(map);
 
    
