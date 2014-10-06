@@ -16,12 +16,11 @@ function initMap() {
         collapsed: false
     }).addTo(map);
 
-    var stylesheet ='* {iconUrl: "../images/marker-icon.png";markerWidth: 30;markerHeight: 40;} * [TITULO="smc"] {iconUrl:"../images/underground.png";markerWidth: 32;markerHeight: 37;}';
+   
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
-       serverURL: "http://localhost/geoserver/s/wfs",
+       serverURL: "http://geoemerg-win2008.emergya.es/geoserver/s/wfs",
        typeName: "s:EDITABLE_PUNTO",  
-       label: "Prueba WFST",
-       //stylesheet: stylesheet
+       label: "Prueba WFST"
     }).addTo(map);
 
    
