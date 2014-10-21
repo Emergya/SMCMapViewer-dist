@@ -18,8 +18,8 @@ function initMap() {
 
    
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
-       serverURL: "http://geoemerg-win2008.emergya.es/geoserver/s/wfs",
-       typeName: "s:EDITABLE_PUNTO",  
+       serverURL: "http://geolab.emergya.com/geoserver/emergya/wfs",
+       typeName: "emergya:markertests",  
        label: "Prueba WFST"
     }).addTo(map);
 
