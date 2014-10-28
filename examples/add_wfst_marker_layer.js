@@ -16,11 +16,25 @@ function initMap() {
         collapsed: false
     }).addTo(map);
 
-   
+    var stylesheet1 ='* {iconUrl: "../images/marker-icon.png";markerWidth: 30;markerHeight: 40;}';
+    var stylesheet2 ='* {iconUrl:"../images/underground.png";markerWidth: 32;markerHeight: 37;}';
+
     var wfsMarkerLayer = SMC.wfstMarkerLayer({
+        serverURL: "http://geolab.emergya.com/geoserver/emergya/wfs",
+        typeName: "emergya:markertests",  
+        label: "Prueba WFST",
+        readOnlyFields:['title'],
+        defaultNewValues:{
+            'title': 'defaultTitle'
+        },
+        stylesheet: stylesheet1,
+    }).addTo(map);
+
+    var wfsMarkerLayer2 = SMC.wfstMarkerLayer({
        serverURL: "http://geolab.emergya.com/geoserver/emergya/wfs",
-       typeName: "emergya:markertests",  
-       label: "Prueba WFST"
+       typeName: "emergya:markertests2",  
+       label: "Prueba WFST 2",
+       stylesheet: stylesheet2,
     }).addTo(map);
 
    
