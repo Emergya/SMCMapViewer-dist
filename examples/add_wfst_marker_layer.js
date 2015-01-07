@@ -27,6 +27,7 @@ function initMap() {
         defaultNewValues:{
             'title': 'defaultTitle'
         },
+        cql_filter:"title='defaultTitle'", 
         stylesheet: stylesheet1,
     }).addTo(map);
 
